@@ -32,4 +32,10 @@ public class ArticleDao {
     public void insertArticle(Article article) {
         em.persist(article);
     }
+
+    public void updateArticle(ArticleDto dto) {
+        Article article = em.find(Article.class, dto.getId());
+        article.setTitle(dto.getTitle());
+        article.setContent(dto.getContent());
+    }
 }
