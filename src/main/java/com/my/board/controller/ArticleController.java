@@ -1,6 +1,7 @@
 package com.my.board.controller;
 
 import com.my.board.dto.ArticleDto;
+import com.my.board.dto.CommentDto;
 import com.my.board.service.ArticleService;
 import com.my.board.service.PaginationService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @RequestMapping("articles")
 @RequiredArgsConstructor
 public class ArticleController {
+
 
     private  final ArticleService articleService;
     private final PaginationService paginationService;
@@ -31,7 +35,8 @@ public class ArticleController {
                                        size = 5,
                                        sort = "id",
                                        direction = Sort.Direction.DESC
-                               )Pageable pageable) {
+
+                               ) Pageable pageable) {
         // controller -> service -> dao(Data Access Object)
 //        List<ArticleDto> articles = articleService.getAllArticle();
         Page<ArticleDto> articles = articleService.getArticlePage(pageable);
@@ -51,5 +56,23 @@ public class ArticleController {
         model.addAttribute("pageBars", barNumbers);
         model.addAttribute("articles", articles);
         return "articles/show_all";
+
+    @GetMapping("{id}")
+    public String showOneArticle(@PathVariable("id")Long id,
+                                 Model model){
+//        id로 게시글 검색 후
+//        DTO로 변환해서 show.html에 보냄
+//        여기는 댓글인 comment도 리스트로 갖고 있다.
+        ArticleDto dto = articleService.getOneArticle(id);
+        model.addAttribute("dto", dto);
+        return "/articles/show";
+    }
+
+    @GetMapping("{id}/delete")
+    public String deletearticle(@PathVariable("id")Long id, RedirectAttributes redirectAttributes){
+        articleService.deleteArticle(id);
+        redirectAttributes.addFlashAttribute("msg", "정상적으로 삭제되었습니다");
+        return "redirect:/articles";
+
     }
 }
