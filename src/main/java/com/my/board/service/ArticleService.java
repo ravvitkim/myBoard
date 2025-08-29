@@ -48,4 +48,5 @@ public class ArticleService {
     public void deleteArticle(Long id) {
         dao.deleteArticle(id);
     }
+
 }

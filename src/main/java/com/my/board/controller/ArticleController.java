@@ -24,7 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleController {
 
-    private final ArticleService articleService;
+
+    private  final ArticleService articleService;
     private final PaginationService paginationService;
 
     @GetMapping({"", "/"})
@@ -34,6 +35,7 @@ public class ArticleController {
                                        size = 5,
                                        sort = "id",
                                        direction = Sort.Direction.DESC
+
                                ) Pageable pageable) {
         // controller -> service -> dao(Data Access Object)
 //        List<ArticleDto> articles = articleService.getAllArticle();
@@ -54,7 +56,6 @@ public class ArticleController {
         model.addAttribute("pageBars", barNumbers);
         model.addAttribute("articles", articles);
         return "articles/show_all";
-    }
 
     @GetMapping("{id}")
     public String showOneArticle(@PathVariable("id")Long id,
@@ -72,5 +73,6 @@ public class ArticleController {
         articleService.deleteArticle(id);
         redirectAttributes.addFlashAttribute("msg", "정상적으로 삭제되었습니다");
         return "redirect:/articles";
+
     }
 }
