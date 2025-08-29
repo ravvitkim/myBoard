@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 //페이징 블럭을 전달해 주는 서비스
 public class PaginationService {
     private static final int BAR_LENGTH = 5;
-    public List<Integer> getpaginationBarNumber(
+    public List<Integer> getPaginationBarNumber(
             int currentPageNumber,
             int totalPageNumber
     ){
@@ -25,4 +25,5 @@ public class PaginationService {
     public int currentBarLenght() {
         return BAR_LENGTH;
     }
+
 }

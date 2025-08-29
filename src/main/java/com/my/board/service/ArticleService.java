@@ -49,4 +49,7 @@ public class ArticleService {
         dao.deleteArticle(id);
     }
 
+    public void insertArticle(ArticleDto dto) {
+        dao.insertArticle(ArticleDto.fromDto(dto));
+    }
 }
