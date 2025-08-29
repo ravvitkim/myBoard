@@ -19,3 +19,8 @@ flex-direction:column;
 margin: auto 0 0 0; /* 메인이 늘어나면 푸터가 밑으로 이동되도록 */
 width:100%
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
