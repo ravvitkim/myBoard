@@ -58,6 +58,65 @@
     <!-- 전송버튼-->
     <button type="button" class="btn btn-primary" id="comment-create-btn">댓글 작성</button>
   </form>
+  <!--th:inline은 자바스크립트에서 ${~~} 타임리프 객체 지정을 할 수 있는 스크립트-->
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      // 댓글작성 버튼 이벤트
+      const commentCreateButton = document.getElementById('comment-create-btn');
+
+      if (commentCreateButton) {
+        commentCreateButton.addEventListener('click', function(event) {
+          event.preventDefault();
+
+          // 닉네임과 본문 입력 필드 가져오기
+          const nicknameInput = document.getElementById('new-comment-nickname');
+          const bodyInput = document.getElementById('new-comment-body');
+
+          // 유효성 검사
+          if (nicknameInput.value.trim() === "") {
+            alert('닉네임을 입력하세요');
+            nicknameInput.focus();
+            return;
+          }
+
+          if (bodyInput.value.trim() === "") {
+            alert('본문을 입력하세요');
+            bodyInput.focus();
+            return;
+          }
+
+          // API 요청 URL 생성
+          const sendUrl = `/api/articles/[[${dto.id}]]/comments`;
+
+          // 전송할 댓글 데이터 객체
+          const newComment = {
+            nickname: nicknameInput.value,
+            body: bodyInput.value
+          };
+
+          // 댓글 저장 API 호출
+          fetch(sendUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newComment)
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message);
+            location.href = '/articles/[[${dto.id}]]';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        });
+      }
+    });
+  </script>
 </div>
+
+
+
 </body>
 </html>
