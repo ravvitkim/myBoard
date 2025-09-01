@@ -1,6 +1,7 @@
 package com.my.board.api.controller;
 
 import com.my.board.api.dao.CommentDao;
+import com.my.board.api.exception.ApiResponse;
 import com.my.board.api.exception.BadRequestException;
 import com.my.board.api.service.CommentService;
 import com.my.board.dto.CommentDto;
@@ -9,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -43,5 +41,19 @@ public class CommentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(dto);
+    }
+
+    //2. 댓글 생성 API
+    // "/api/articles/{articleId}/comments"
+    @PostMapping("/api/articles/{articleId}/comments")
+    public ResponseEntity<?> commentCreate(
+            @PathVariable("articleId")Long articleId,
+            @RequestBody CommentDto dto
+    ){
+        commentService.insertComment(articleId, dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.builder()
+                        .message("댓글 생성 성공")
+                        .build());
     }
 }
