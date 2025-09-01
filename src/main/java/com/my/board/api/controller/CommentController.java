@@ -84,4 +84,25 @@ public class CommentController {
                         .message("댓글 수정 성공")
                         .build());
     }
+
+    //5.댓글 삭제처리
+    @DeleteMapping("/api/comments/{commentId}")
+    public ResponseEntity<?> commentDelete(
+            @PathVariable("commentId")Long commentId
+    ){
+        //삭제 할 comment 확인
+        Map<String,Object> result = commentService.findComment(commentId);
+        CommentDto findDto = (CommentDto)result.get("dto");
+        if (ObjectUtils.isEmpty(findDto)) {
+            String message = "댓글 삭제 실패";
+            throw new BadRequestException(message);
+        }
+        commentService.deleteComment(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.builder()
+                        .message("댓글 삭제 성공")
+                        .build());
+    }
+
 }
