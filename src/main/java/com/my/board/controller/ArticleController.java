@@ -1,5 +1,6 @@
 package com.my.board.controller;
 
+import com.my.board.api.service.CommentService;
 import com.my.board.dto.ArticleDto;
 import com.my.board.service.ArticleService;
 import com.my.board.service.PaginationService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("articles")
@@ -21,6 +23,7 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
     private final PaginationService paginationService;
+    private final CommentService commentService;
 
     @GetMapping({"", "/"})
     public String showArticles(Model model,
@@ -100,6 +103,15 @@ public class ArticleController {
           articleService.updateArticle(dto);
           return "redirect:/articles";
       }
+
+    @GetMapping("comments/view/{commentId}")
+    public String commentUpdateFormView(@PathVariable("commentId")Long commentId, Model model) {
+        //CommentService의 한 개 댓글 찾기 서비스로 가져오기
+        Map<String, Object> comment = commentService.findComment(commentId);
+        model.addAttribute("dto",comment.get("dto"));
+        model.addAttribute("articleId", comment.get("articleId"));
+        return "/articles/update_comment";
+    }
 
 
 }
